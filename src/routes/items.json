@@ -1,0 +1,35 @@
+{
+    "items": [
+        {
+            "id": 1,
+            "title": "Testitem 1",
+            "type": "Urkunde",
+            "href": "https://unibe.ch",
+            "x": 0,
+            "y": 400
+        },
+        {
+            "id": 2,
+            "title": "Testitem Zwei",
+            "type": "Urkunde",
+            "href": "https://unibe.ch",
+            "x": 11,
+            "y": 564
+        },
+        {
+            "id": 3,
+            "title": "Testitem mit Datum",
+            "type": "Urkunde",
+            "href": "https://unibe.ch",
+            "date": "12.12.1212"
+        }
+    ],
+    "links": [
+        {
+            "id": 1123,
+            "title": "Linktitle",
+            "nodes": [1,2],
+            "href": "https://unibe.ch"
+          }
+    ]
+}
