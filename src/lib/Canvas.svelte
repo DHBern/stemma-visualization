@@ -8,9 +8,9 @@
 	export let height = 600;
 	export let circleRadius = 20;
 
-	/** @type { Array<Object> } */
+	/** @type { Array.<Object> } */
 	export let items;
-	/** @type { Array<Object> } */
+	/** @type { Array.<Object> } */
 	export let links;
 
 	export let colorScale = scaleOrdinal([...new Set(items.map((i) => i.type))], schemeAccent);
