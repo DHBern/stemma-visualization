@@ -4,8 +4,8 @@
 	import { extent } from 'd3-array';
 	import { each } from 'svelte/internal';
 
-	export let width = 600;
-	export let height = 600;
+	export let width = 0;
+	export let height = 0;
 	export let circleRadius = 20;
 
 	/** @type { Array.<Object> } */
@@ -18,47 +18,56 @@
 	const buffer = 20;
 	const axisSpace = 50;
 
-	let xExtent = extent(items, (d) => d.x);
-	let yExtent = extent(items, (d) => d.y);
+	$: xExtent = extent(items, (d) => d.x);
+	$: yExtent = extent(items, (d) => d.y);
 
-	let xScale = scaleLinear()
+	$: xScale = scaleLinear()
 		.domain(xExtent)
 		.range([buffer + axisSpace, width - buffer]);
-	let yScale = scaleLinear()
+	$: yScale = scaleLinear()
 		.domain(yExtent)
 		.range([height - buffer - axisSpace, buffer]);
 </script>
-
-<svg {width} {height}>
-	{#each items as item}
-		{#if item.href}
-			<a href={item.href} target="_blank">
+<div class="plot"
+	bind:clientWidth={width}
+	bind:clientHeight={height}>
+	<svg width={width} height={height}>
+		{#each items as item}
+			{#if item.href}
+				<a href={item.href} target="_blank">
+					<circle
+						r={circleRadius}
+						cx={xScale(item.x)}
+						cy={yScale(item.y)}
+						fill={colorScale(item.type)}
+					/>
+				</a>
+			{:else}
 				<circle
 					r={circleRadius}
 					cx={xScale(item.x)}
 					cy={yScale(item.y)}
 					fill={colorScale(item.type)}
 				/>
-			</a>
-		{:else}
-			<circle
-				r={circleRadius}
-				cx={xScale(item.x)}
-				cy={yScale(item.y)}
-				fill={colorScale(item.type)}
+			{/if}
+		{/each}
+		{#each links as link}
+			{@const source = items.find((e) => e.id === link.nodes[0])}
+			{@const target = items.find((e) => e.id === link.nodes[1])}
+			<path
+				d={linkVertical()({
+					source: [xScale(source.x), yScale(source.y)],
+					target: [xScale(target.x), yScale(target.y)]
+				})}
+				fill="none"
+				stroke="black"
 			/>
-		{/if}
-	{/each}
-	{#each links as link}
-		{@const source = items.find((e) => e.id === link.nodes[0])}
-		{@const target = items.find((e) => e.id === link.nodes[1])}
-		<path
-			d={linkVertical()({
-				source: [xScale(source.x), yScale(source.y)],
-				target: [xScale(target.x), yScale(target.y)]
-			})}
-			fill="none"
-			stroke="black"
-		/>
-	{/each}
-</svg>
+		{/each}
+	</svg>
+</div>
+
+<style lang="scss">
+	.plot {
+		height: 100%;
+	}
+</style>

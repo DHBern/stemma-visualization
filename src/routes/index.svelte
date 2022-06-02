@@ -39,5 +39,6 @@
 		margin-right: auto;
 		margin-top: 5rem;
 		width: 600px;
+		height: 70vh;
 	}
 </style>
