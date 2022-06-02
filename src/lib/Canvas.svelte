@@ -27,30 +27,20 @@
 	$: yScale = scaleLinear()
 		.domain(yExtent)
 		.range([height - buffer - axisSpace, buffer]);
+
+		const circleMouseover = (d) => {
+			let r = parseInt(d.target.attributes.r.value);
+			if (r === circleRadius) {
+				d.target.attributes.r.value = circleRadius * 1.5;
+			} else {
+				d.target.attributes.r.value = circleRadius;
+			}
+		}
 </script>
 <div class="plot"
 	bind:clientWidth={width}
 	bind:clientHeight={height}>
 	<svg width={width} height={height}>
-		{#each items as item}
-			{#if item.href}
-				<a href={item.href} target="_blank">
-					<circle
-						r={circleRadius}
-						cx={xScale(item.x)}
-						cy={yScale(item.y)}
-						fill={colorScale(item.type)}
-					/>
-				</a>
-			{:else}
-				<circle
-					r={circleRadius}
-					cx={xScale(item.x)}
-					cy={yScale(item.y)}
-					fill={colorScale(item.type)}
-				/>
-			{/if}
-		{/each}
 		{#each links as link}
 			{@const source = items.find((e) => e.id === link.nodes[0])}
 			{@const target = items.find((e) => e.id === link.nodes[1])}
@@ -62,6 +52,30 @@
 				fill="none"
 				stroke="black"
 			/>
+		{/each}
+
+		{#each items as item}
+			{#if item.href}
+				<a href={item.href} target="_blank">
+					<circle
+						r={circleRadius}
+						cx={xScale(item.x)}
+						cy={yScale(item.y)}
+						fill={colorScale(item.type)}
+						on:mouseenter={circleMouseover}
+						on:mouseleave={circleMouseover}
+						on:focus={circleMouseover}
+						on:blur={circleMouseover}
+					/>
+				</a>
+			{:else}
+				<circle
+					r={circleRadius}
+					cx={xScale(item.x)}
+					cy={yScale(item.y)}
+					fill={colorScale(item.type)}
+				/>
+			{/if}
 		{/each}
 	</svg>
 </div>
