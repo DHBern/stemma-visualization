@@ -1,7 +1,7 @@
 <script>
 	import { extent } from 'd3-array';
 	import Canvas from '$lib/Canvas.svelte';
-	import items from './items.json';
+	import items from './dates.json';
 
 	/**
  	* A function to convert the data in the date field into a date object.
