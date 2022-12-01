@@ -1,7 +1,17 @@
 <script>
 	import { extent } from 'd3-array';
 	import Canvas from '$lib/Canvas.svelte';
-	import items from './dates.json';
+	// import items from './dates.json';
+
+	//TODO: import this type
+/**
+	 * @typedef link
+	 * @type {Object}
+	 * @property {number} id
+	 * @property {string} title
+	 * @property {number[]} nodes
+	 * @property {string} href
+	 */
 
 	/**
 	 * @typedef {Object} dateItem
@@ -14,7 +24,7 @@
 	 * @property {string} title
 	 * @property {string} type
 	 * @property {number=} x
-	*/
+	 */
 
 	/**
 	 * @typedef {Object} coordinateItem
@@ -24,7 +34,19 @@
 	 * @property {string} type
 	 * @property {number} x
 	 * @property {number} y
-	*/
+	 */
+
+	export let data;
+
+	/**
+	 * @typedef {Object} Container
+	 * @property {dateItem[]} items
+	 * @property {link[]} links
+	 */
+
+
+	/** @type {Container} */
+	const items = data.items;
 
 	/** @param {number} year */
 	const isLeapYear = function (year) {
