@@ -12,10 +12,7 @@
 	 * @type {Object}
 	 * @property {number} x
 	 * @property {number} y
-	 * @property {string} label
-	 * @property {string} color
 	 * @property {number} id
-	 * @property {string[]} links
 	 * @property {string} type
 	 * @property {string} href
 	 */
@@ -67,6 +64,7 @@
 				).attributes.r.value = circleRadius.toString();
 			}
 		}
+	};
 
 	$: xPath = `M 0 0 H ${xScale.range()[1]}`;
 </script>
