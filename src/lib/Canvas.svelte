@@ -2,7 +2,6 @@
 	import { scaleLinear, scaleOrdinal } from 'd3-scale';
 	import { linkVertical, schemeAccent } from 'd3';
 	import { extent } from 'd3-array';
-	import { each } from 'svelte/internal';
 
 	export let width = 0;
 	export let height = 0;
@@ -38,7 +37,7 @@
 
 	export let colorScale = scaleOrdinal([...new Set(items.map((i) => i.type))], schemeAccent);
 
-	const buffer = 20;
+	const buffer = 32;
 	const axisSpace = 50;
 
 	$: xExtent = extent(items, (/** @type {item} */ d) => d.x);
@@ -68,11 +67,36 @@
 				).attributes.r.value = circleRadius.toString();
 			}
 		}
-	};
-</script>
 
-<div class="plot" bind:clientWidth={width} bind:clientHeight={height}>
-	<svg {width} {height}>
+	$: xPath = `M 0 0 H ${xScale.range()[1]}`;
+</script>
+<ul>
+	<li>xScale: {xScale.range()}</li>
+	<li>yScale: {yScale.range()}</li>
+	<li>xExtent: {xExtent}</li>
+</ul>
+<div class="plot"
+	bind:clientWidth={width}
+	bind:clientHeight={height}>
+	<svg width={width} height={height}>
+		<g class="axis">
+			<g transform="translate( {buffer} {5} )">
+				<path d={xPath} stroke="black" />
+			</g>
+		</g>
+		<!--<g class="axis">
+			<g class="x-axis">
+				<line x1={buffer} y1={yExtent[1]} x2={xScale.range()[1]} y2={yScale.range()[0]} stroke="black" />
+				<text x={xScale.range()[1]} y={yScale.range()[0]} dy="1.5em">{xExtent[1]}</text>
+				<text x={xScale.range()[0]} y={yScale.range()[0]} dy="1.5em">{xExtent[0]}</text>
+			</g>
+			<g class="y-axis">
+				<line x1={xScale.range()[0]} y1={yScale.range()[0]} x2={xScale.range()[0]} y2={yScale.range()[1]} />
+				<text x={xScale.range()[0]} y={yScale.range()[0]} dx="-1.5em" dy="0.5em">{yExtent[0]}</text>
+				<text x={xScale.range()[0]} y={yScale.range()[1]} dx="-1.5em" dy="0.5em">{yExtent[1]}</text>
+			</g>
+		</g>-->
+
 		{#each links as link}
 			{@const source = items.find((e) => e.id === link.nodes[0]) ?? { x: 0, y: 0 }}
 			{@const target = items.find((e) => e.id === link.nodes[1]) ?? { x: 0, y: 0 }}
@@ -87,27 +111,29 @@
 		{/each}
 
 		{#each items as item}
-			{#if item.href}
-				<a href={item.href} target="_blank" rel="noreferrer">
+			<g transform="translate( {xScale(item.x)} {yScale(item.y)})">
+				{#if item.href}
+					<a href={item.href} target="_blank" rel="noreferrer">
+						<circle
+							r={circleRadius}
+							cx={0}
+							cy={0}
+							fill={colorScale(item.type)}
+							on:mouseenter={circleMouseover}
+							on:mouseleave={circleMouseover}
+							on:focus={circleMouseover}
+							on:blur={circleMouseover}
+						/>
+					</a>
+				{:else}
 					<circle
 						r={circleRadius}
-						cx={xScale(item.x)}
-						cy={yScale(item.y)}
+						cx={0}
+						cy={0}
 						fill={colorScale(item.type)}
-						on:mouseenter={circleMouseover}
-						on:mouseleave={circleMouseover}
-						on:focus={circleMouseover}
-						on:blur={circleMouseover}
 					/>
-				</a>
-			{:else}
-				<circle
-					r={circleRadius}
-					cx={xScale(item.x)}
-					cy={yScale(item.y)}
-					fill={colorScale(item.type)}
-				/>
-			{/if}
+				{/if}
+			</g>
 		{/each}
 	</svg>
 </div>

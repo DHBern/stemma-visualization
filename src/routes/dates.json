@@ -7,9 +7,10 @@
             "href": "https://unibe.ch",
             "date": {
                 "year": 2212,
-                "month": 12,
-                "day": 12
-            }
+                "month": 8,
+                "day": 31
+            },
+            "x": 22
         },
         {
             "id": 2,
@@ -18,20 +19,22 @@
             "href": "https://test.ch",
             "date": {
                 "year": 1452,
-                "month": 12,
+                "month": 2,
                 "day": 12
-            }
+            },
+            "x": 4
         },
         {
             "id": 2,
             "title": "Testitem mit Datum",
             "type": "Urkunde",
-            "href": "https://unibe.ch",
+            "href": "https://lowest.ch",
             "date": {
                 "year": 1252,
                 "month": 12,
-                "day": 12
-            }
+                "day": 2
+            },
+            "x": 1
         }
     ],
     "links": [
